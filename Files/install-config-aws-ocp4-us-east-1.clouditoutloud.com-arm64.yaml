@@ -1,0 +1,60 @@
+apiVersion: v1
+baseDomain: $BASE_DOMAIN
+controlPlane:
+  architecture: arm64
+  hyperthreading: Enabled
+  name: master
+  platform:
+    aws:
+      rootVolume:
+        iops: 4000
+        size: 500
+        type: io1
+      type: r6g.xlarge
+      zones:
+      - us-east-1b
+      - us-east-1c
+      - us-east-1d
+  replicas: 3
+compute:
+- architecture: arm64
+  hyperthreading: Enabled
+  name: worker
+  platform:
+    aws:
+      rootVolume:
+        iops: 2000
+        size: 500
+        type: io1
+      type: r6g.large
+      zones:
+      - us-east-1b
+      - us-east-1c
+      - us-east-1d
+  replicas: 3
+metadata:
+  creationTimestamp: null
+  name: $CLUSTER_NAME
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  aws:
+    region:          $REGION
+    userTags:
+      adminContact:  jradtke@redhat.com
+      costCenter:    8675309
+      purpose:       'IPI Installation Testing'
+      fips:          false
+      jokes:         dad
+      notes:         'Testing extensible tagging'
+fips: false
+publish: External
+pullSecret: '$PULL_SECRET'
+sshKey: '$SSH_KEY'

@@ -14,12 +14,14 @@ MYPROJ="ciolwelcomepage"
 oc new-project $MYPROJ --description="Welcome Page" --display-name="CloudItOutLoud Welcome Page" || { echo "ERROR: something went wrong"; exit 9; }
 #oc new-app httpd~https://github.com/cloudxabide/ocp_clouditoutloud_com/
 oc new-app php:7.3~https://github.com/cloudxabide/ocp_clouditoutloud_com/
-echo '{ "kind": "List", "apiVersion": "v1", "metadata": {}, "items": [ { "kind": "Route", "apiVersion": "v1", "metadata": { "name": "wwwclouditoutloudcom", "creationTimestamp": null, "labels": { "app": "wwwclouditoutloudcom" } }, "spec": { "host": "www.clouditoutloud.com", "to": { "kind": "Service", "name": "ocpclouditoutloudcom" }, "port": { "targetPort": 8080 }, "tls": { "termination": "edge" } }, "status": {} } ] }' | oc create -f -
+# Third-Level Domain
+echo '{ "kind": "List", "apiVersion": "v1", "metadata": {}, "items": [ { "kind": "Route", "apiVersion": "v1", "metadata": { "name": "wwwclouditoutloudcom", "creationTimestamp": null, "labels": { "app": "wwwclouditoutloudcom" } }, "spec": { "host": "www.ocp.clouditoutloud.com", "to": { "kind": "Service", "name": "ocpclouditoutloudcom" }, "port": { "targetPort": 8080 }, "tls": { "termination": "edge" } }, "status": {} } ] }' | oc create -f -
+# Fifth-level Domain
 echo '{ "kind": "List", "apiVersion": "v1", "metadata": {}, "items": [ { "kind": "Route", "apiVersion": "v1", "metadata": { "name": "wwwappstestclusterocpclouditoutloudcom", "creationTimestamp": null, "labels": { "app": "wwwclouditoutloudcom" } }, "spec": { "host": "www.apps.testcluster.ocp.clouditoutloud.com", "to": { "kind": "Service", "name": "ocpclouditoutloudcom" }, "port": { "targetPort": 8080 }, "tls": { "termination": "edge" } }, "status": {} } ] }' | oc create -f -
 sleep 3
 # If you want to test round-robin and app scaling
-oc scale deployment/wwwclouditoutloudcom --replicas=3
-while true; do curl --silent https://www.clouditoutloud.com/phpinfo.php | grep Hostname; sleep 1; done
+oc scale deployment/ocpclouditoutloudcom --replicas=3
+while true; do curl --silent https://www.ocp.clouditoutloud.com/phpinfo.php | grep Hostname; sleep 1; done
 
 sleep 60
 
@@ -36,6 +38,8 @@ while true; do oc get pods | egrep Init; sleep 2; done
 
 # Add a route (hexgl.clouditoutloud.com)
 echo '{ "kind": "List", "apiVersion": "v1", "metadata": {}, "items": [ { "kind": "Route", "apiVersion": "v1", "metadata": { "name": "hexgl-apex", "creationTimestamp": null, "labels": { "app": "hexgl" } }, "spec": { "host": "hexgl.clouditoutloud.com", "to": { "kind": "Service", "name": "hexgl" }, "port": { "targetPort": 8080 }, "tls": { "termination": "edge" } }, "status": {} } ] }' | oc create -f -
+# Third-level
+echo '{ "kind": "List", "apiVersion": "v1", "metadata": {}, "items": [ { "kind": "Route", "apiVersion": "v1", "metadata": { "name": "hexgl-third-level", "creationTimestamp": null, "labels": { "app": "hexgl" } }, "spec": { "host": "hexgl.ocp.clouditoutloud.com", "to": { "kind": "Service", "name": "hexgl" }, "port": { "targetPort": 8080 }, "tls": { "termination": "edge" } }, "status": {} } ] }' | oc create -f -
 
 # Add a route (hexgl.apps.testcluster.ocp.clouditoutloud.com)
 echo '{ "kind": "List", "apiVersion": "v1", "metadata": {}, "items": [ { "kind": "Route", "apiVersion": "v1", "metadata": { "name": "hexgl-fqdn", "creationTimestamp": null, "labels": { "app": "hexgl" } }, "spec": { "host": "hexgl.apps.testcluster.ocp.clouditoutloud.com", "to": { "kind": "Service", "name": "hexgl" }, "port": { "targetPort": 8080 }, "tls": { "termination": "edge" } }, "status": {} } ] }' | oc create -f -
@@ -46,6 +50,9 @@ oc scale deployment.apps/php --replicas=0
 oc scale deployment.apps/hexgl --replicas=3
 
 exit 0
+
+# if webhooks are broke,
+oc patch deployment/ocpclouditoutloudcom --patch    "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"last-restart\":\"`date +'%s'`\"}}}}}"
 
 # 
 At some point you will be able to browse to (depending on the route you enabled):  

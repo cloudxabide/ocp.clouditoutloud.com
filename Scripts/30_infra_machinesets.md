@@ -18,16 +18,19 @@ do
 done
 
 wget <blah - machineset template> machineset-infra-aws.ocp.clouditoutloud.com.yaml
-# Taking the Zones we discovered, we need to create a machineset for each
-
-# Need to replace: 
+# Using the Zones we discovered, we need to create a machineset for each
+# Using evnsubst - need to replace: 
 # INFRASTRUCTURE_ID AMI_ID AWS_REGION AWS_ZONE
 for AWS_ZONE in $ZONES
 do 
  envsubst < blah template  > machineset-infra-aws-${AWS_ZONE}.ocp.clouditoutloud.com.yaml 
 done
  
-
+# Create machineset for each AZ
+for AWS_ZONE in $ZONES
+do
+  oc create -f  machineset-infra-aws-${AWS_ZONE}.ocp.clouditoutloud.com.yaml
+done
 
 exit 0
 

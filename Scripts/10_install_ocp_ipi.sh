@@ -1,10 +1,11 @@
 #!/bin/bash
 # OCP4 Installation (IPI - VMware/AWS)
 
-
-# STATUS:  Work in Progress.  Trying to make this less dependent on the host it's
+# STATUS: Done.  I *think* you could simply just run "sh ./10_install_ocp_ipi.sh"
+#                 at this point.
+#         Work in Progress (previous).  Trying to make this less dependent on the host it's
 #           running on and PULL everything needed for all the tasks.
-#          This works for me at this point, but I am definitely open to
+#         This works for me at this point, but I am definitely open to
 #           suggestions for improvement.
 
 # NOTES:  I am going to create this to be run on a Linux host, at this point.
@@ -157,6 +158,9 @@ echo "End: `date`" >> $MYLOG
 # ${OCP_INSTALL_DIR}/openshift-install create cluster --dir=${OCP4_DIR}/ --log-level=debug > ${OCP4_DIR}/installation.log 2>&1
 
 export KUBECONFIG=${OCP4_DIR}/auth/kubeconfig
+
+exit 0
+
 
 # ${OCP_INSTALL_DIR}/openshift-install destroy cluster --dir=${OCP4_DIR}/ --log-level=debug
 

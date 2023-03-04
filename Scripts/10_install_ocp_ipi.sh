@@ -157,7 +157,8 @@ echo "End: `date`" >> $MYLOG
 # or....
 # ${OCP_INSTALL_DIR}/openshift-install create cluster --dir=${OCP4_DIR}/ --log-level=debug > ${OCP4_DIR}/installation.log 2>&1
 
-export KUBECONFIG=${OCP4_DIR}/auth/kubeconfig
+export KUBECONFIG=$(find $OCP4_BASE -name kubeconfig | tail -1)
+#export KUBECONFIG=${OCP4_DIR}/auth/kubeconfig
 
 exit 0
 

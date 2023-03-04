@@ -6,10 +6,10 @@ oc get configs.imageregistry.operator.openshift.io -o yaml > registry-0.yaml
 ## Customize the OpenShift Console logo
 
 cd ${OCP4_DIR}
-wget https://github.com/cloudxabide/ocp.clouditoutloud.com/raw/main/Images/CIOL-LOGO.png -O ${OCP4_DIR}/CIOL-LOGO.png
+wget -O ./OCP-CIOL.png https://github.com/cloudxabide/ocp.clouditoutloud.com/raw/main/Images/OCP-CIOL.png
 
-oc create configmap console-custom-logo --from-file ${OCP4_DIR}/CIOL-LOGO.png  -n openshift-config
-oc patch console.operator.openshift.io cluster --type merge --patch '{"spec":{"customization":{"customLogoFile":{"key":"CIOL-LOGO.png"}}}}'
+oc create configmap console-custom-logo --from-file ${OCP4_DIR}/OCP-CIOL.png  -n openshift-config
+oc patch console.operator.openshift.io cluster --type merge --patch '{"spec":{"customization":{"customLogoFile":{"key":"OCP-CIOL.png"}}}}'
 oc patch console.operator.openshift.io cluster --type merge --patch '{"spec":{"customization":{"customLogoFile":{"name":"console-custom-logo"}}}}'
 oc patch console.operator.openshift.io cluster --type merge --patch '{"spec":{"customization":{"customProductName":"LinuxRevolution Console"}}}'
 
@@ -21,7 +21,7 @@ oc edit console.operator.openshift.io cluster
   operatorLogLevel: Normal
   customization:
     customLogoFile:
-      key: CIOL-LOGO.png
+      key: OCP-CIOL.png
       name: console-custom-logo
     customProductName: LinuxRevolution Console
 }
